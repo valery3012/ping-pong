@@ -41,9 +41,19 @@ def receive():
 font_win = font.Font(None, 72)
 font_main = font.Font(None, 36)
 # --- ЗОБРАЖЕННЯ ----
-
+player1_img = image.load('paddle.png')
+player1_img = transform.flip(player1_img, True, False)
+player1_img = transform.scale(player1_img, (50,100))
+player2_img = image.load('paddle.png')
+player2_img = transform.scale(player2_img, (50,100))
+ball_img = image.load('ball.png')
+ball_img = transform.scale(ball_img, (70,100))
+BG_img = image.load('background.png')
+BG_img = transform.scale(BG_img, (WIDTH, HEIGHT))
 # --- ЗВУКИ ---
-
+mixer.init()
+WALL_HIT_SOUND = mixer.Sound("metal_sound.aif")
+PADDLE_HIT_SOUND = mixer.Sound("metal_sound.aif")
 # --- ГРА ---
 game_over = False
 winner = None
@@ -89,9 +99,15 @@ while True:
 
     if game_state:
         screen.fill((30, 30, 30))
-        draw.rect(screen, (0, 255, 0), (20, game_state['paddles']['0'], 20, 100))
-        draw.rect(screen, (255, 0, 255), (WIDTH - 40, game_state['paddles']['1'], 20, 100))
-        draw.circle(screen, (255, 255, 255), (game_state['ball']['x'], game_state['ball']['y']), 10)
+        screen.blit(BG_img, (0,0))
+        #draw.rect(screen, (0, 255, 0), (20, game_state['paddles']['0'], 20, 100))
+        #draw.rect(screen, (255, 0, 255), (WIDTH - 40, game_state['paddles']['1'], 20, 100))
+        #draw.circle(screen, (255, 255, 255), (game_state['ball']['x'], game_state['ball']['y']), 10)
+        
+        screen.blit(player1_img, (20,game_state['paddles']['0']))
+        screen.blit(player2_img, (WIDTH - 40, game_state['paddles']['1']))
+        screen.blit(ball_img, (game_state['ball']['x'], game_state['ball']['y']))
+        
         score_text = font_main.render(f"{game_state['scores'][0]} : {game_state['scores'][1]}", True, (255, 255, 255))
         screen.blit(score_text, (WIDTH // 2 -25, 20))
 
